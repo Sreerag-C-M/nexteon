@@ -37,6 +37,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   get:
   dio:
+  flutter_spinkit:
+  marquee:
 
 dev_dependencies:
   flutter_test:

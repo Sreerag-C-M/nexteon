@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
           onPressed: () {
             Get.to(GalleryPage());
           },
-          child: Text('Go to Gallery'),
+          child: Text('Gallery'),
         ),
       ),
     );

@@ -2,10 +2,10 @@ import 'package:get/get.dart';
 import '../model/modelclass.dart';
 import '../service/serviceres.dart';
 
-
 class GalleryController extends GetxController {
-  var galleryItems = <GalleryItem>[].obs;
   var isLoading = true.obs;
+  var galleryItems = <GalleryItem>[].obs;
+  var errorMessage = ''.obs;
 
   @override
   void onInit() {
@@ -18,6 +18,8 @@ class GalleryController extends GetxController {
       isLoading(true);
       var items = await ApiService().fetchGalleryItems();
       galleryItems.assignAll(items);
+    } catch (e) {
+      errorMessage(e.toString());
     } finally {
       isLoading(false);
     }
