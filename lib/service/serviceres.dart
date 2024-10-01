@@ -8,6 +8,7 @@ class ApiService {
     },
   ));
 
+
   Future<List<GalleryItem>> fetchGalleryItems() async {
     try {
       final response = await _dio.get(
