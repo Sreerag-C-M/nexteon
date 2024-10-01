@@ -16,12 +16,17 @@ class GalleryController extends GetxController {
   void fetchGalleryItems() async {
     try {
       isLoading(true);
+      errorMessage('');
+      print('Fetching gallery items...');
       var items = await ApiService().fetchGalleryItems();
       galleryItems.assignAll(items);
+      print('Fetched items: $items');
     } catch (e) {
       errorMessage(e.toString());
+      print('Error: $e');
     } finally {
       isLoading(false);
+      print('Loading state: ${isLoading.value}');
     }
   }
 }

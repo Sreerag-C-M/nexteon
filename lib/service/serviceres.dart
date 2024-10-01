@@ -1,12 +1,11 @@
 import 'package:dio/dio.dart';
-
 import '../model/modelclass.dart';
 
 class ApiService {
   final Dio _dio = Dio(BaseOptions(
     baseUrl: 'https://ajcjewel.com:4000/api',
     headers: {
-      'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfdXNlcklkXyI6IjYzMDI2ZjIxNWE5ZDVjNDY1NzQ3MTMxYSIsIl9lbXBsb3llZUlkXyI6IjYzMDI2ZjIxYTI1MTZhMTU0YTUxY2YxOSIsIl91c2VyUm9sZV8iOiJzdXBlcl9hZG1pbiIsImlhdCI6MTcyNjEyNTUzNCwiZXhwIjoxNzU3NjYxNTM0fQ.WtYYgVWtxVQlbwoIKddHcUGGAKRKMIJayaRHzqjtRU',
+      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfdXNlcklkXyI6IjYzMDI2ZjIxNWE5ZDVjNDY1NzQ3MTMxYSIsIl9lbXBsb3llZUlkXyI6IjYzMDI2ZjIxYTI1MTZhMTU0YTUxY2YxOSIsIl91c2VyUm9sZV8iOiJzdXBlcl9hZG1pbiIsImlhdCI6MTcyNzc2MzIzMywiZXhwIjoxNzU5Mjk5MjMzfQ.aU6MGEdhB7m-N06OF4ni2eGfB74ZfPq7zBfRiMW04o8', // Ensure 'Bearer ' prefix if required
     },
   ));
 
@@ -25,6 +24,7 @@ class ApiService {
         "searchingText": ""
       });
       if (response.statusCode == 200) {
+        print(response.data);
         List<dynamic> data = response.data['data']['list'];
         return data.map((item) => GalleryItem.fromJson(item)).toList();
       } else {
@@ -32,11 +32,14 @@ class ApiService {
       }
     } on DioError catch (e) {
       if (e.response != null) {
+        print('Dio error: ${e.response?.data}');
         throw Exception('Failed to load gallery items: ${e.response?.data}');
       } else {
+        print('Dio error: ${e.message}');
         throw Exception('Failed to load gallery items: ${e.message}');
       }
     } catch (e) {
+      print('General error: $e');
       throw Exception('Failed to load gallery items: $e');
     }
   }
