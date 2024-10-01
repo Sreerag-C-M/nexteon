@@ -2,31 +2,31 @@ import 'package:get/get.dart';
 import '../model/modelclass.dart';
 import '../service/serviceres.dart';
 
+
 class GalleryController extends GetxController {
-  var isLoading = true.obs;
   var galleryItems = <GalleryItem>[].obs;
+  var isLoading = true.obs;
   var errorMessage = ''.obs;
+
+  final ApiService apiService = ApiService();
 
   @override
   void onInit() {
-    fetchGalleryItems();
     super.onInit();
+    fetchGalleryItems();
   }
 
   void fetchGalleryItems() async {
     try {
       isLoading(true);
       errorMessage('');
-      print('Fetching gallery items...');
-      var items = await ApiService().fetchGalleryItems();
+      final items = await apiService.fetchGalleryItems();
       galleryItems.assignAll(items);
-      print('Fetched items: $items');
     } catch (e) {
-      errorMessage(e.toString());
+      errorMessage('Failed to load gallery items');
       print('Error: $e');
     } finally {
       isLoading(false);
-      print('Loading state: ${isLoading.value}');
     }
   }
 }

@@ -19,43 +19,46 @@ class GalleryPage extends StatelessWidget {
             ),
           );
         } else {
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: DataTable(
-                decoration: BoxDecoration(color: Colors.grey.shade100),
-                columns: const [
-                  DataColumn(label: Text('Name')),
-                  DataColumn(label: Text('UID')),
-                  DataColumn(label: Text('DocType')),
-                  DataColumn(label: Text('Image')),
-                ],
-                rows: controller.errorMessage.isNotEmpty
-                    ? [
-                        DataRow(cells: [
-                          DataCell(
-                            Text(
-                              'Failed to load',
-                              style: TextStyle(color: Colors.red),
-                            ),
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Container(
+                  width: constraints.maxWidth,
+                  child: DataTable(
+                    decoration: BoxDecoration(color: Colors.grey.shade100),
+                    columns: const [
+                      DataColumn(label: Text('Name')),
+                      DataColumn(label: Text('UID')),
+                      DataColumn(label: Text('DocType')),
+                      DataColumn(label: Text('Image')),
+                    ],
+                    rows: controller.errorMessage.isNotEmpty
+                        ? [
+                      DataRow(cells: [
+                        DataCell(
+                          Text(
+                            'Failed to load',
+                            style: TextStyle(color: Colors.red),
                           ),
-                          DataCell(Text('')),
-                          DataCell(Text('')),
-                          DataCell(Text('')),
-                        ])
-                      ]
-                    : controller.galleryItems.map((item) {
-                        print(item);
-                        return DataRow(cells: [
-                          DataCell(Text(item.name)),
-                          DataCell(Text(item.uid.toString())),
-                          DataCell(Text(item.docType.toString())),
-                          DataCell(Text(item.url)),
-                        ]);
-                      }).toList(),
-              ),
-            ),
+                        ),
+                        DataCell(Text('')),
+                        DataCell(Text('')),
+                        DataCell(Text('')),
+                      ])
+                    ]
+                        : controller.galleryItems.map((item) {
+                      return DataRow(cells: [
+                        DataCell(Text(item.name)),
+                        DataCell(Text(item.uid.toString())),
+                        DataCell(Text(item.docType.toString())),
+                        DataCell(Text(item.url)),
+                      ]);
+                    }).toList(),
+                  ),
+                ),
+              );
+            },
           );
         }
       }),

@@ -5,12 +5,13 @@ class GalleryItem {
   final int uid;
   final String url;
 
-  GalleryItem(
-      {required this.id,
-      required this.name,
-      required this.docType,
-      required this.uid,
-      required this.url});
+  GalleryItem({
+    required this.id,
+    required this.name,
+    required this.docType,
+    required this.uid,
+    required this.url,
+  });
 
   factory GalleryItem.fromJson(Map<String, dynamic> json) {
     return GalleryItem(
