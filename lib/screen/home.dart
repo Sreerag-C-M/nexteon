@@ -33,28 +33,27 @@ class GalleryPage extends StatelessWidget {
                 ],
                 rows: controller.errorMessage.isNotEmpty
                     ? [
-                  DataRow(cells: [
-                    DataCell(
-                      Text(
-                        'Failed to load',
-                        style: TextStyle(color: Colors.red),
-                      ),
-                      placeholder: true,
-                      showEditIcon: false,
-                    ),
-                    DataCell(Text('')),
-                    DataCell(Text('')),
-                    DataCell(Text('')),
-                  ])
-                ]
+                        DataRow(cells: [
+                          DataCell(
+                            Text(
+                              'Failed to load',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                          DataCell(Text('')),
+                          DataCell(Text('')),
+                          DataCell(Text('')),
+                        ])
+                      ]
                     : controller.galleryItems.map((item) {
-                  return DataRow(cells: [
-                    DataCell(Text(item.name)),
-                    DataCell(Text(item.uid.toString())),
-                    DataCell(Text(item.docType.toString())),
-                    DataCell(Text(item.url)),
-                  ]);
-                }).toList(),
+                        print(item);
+                        return DataRow(cells: [
+                          DataCell(Text(item.name)),
+                          DataCell(Text(item.uid.toString())),
+                          DataCell(Text(item.docType.toString())),
+                          DataCell(Text(item.url)),
+                        ]);
+                      }).toList(),
               ),
             ),
           );

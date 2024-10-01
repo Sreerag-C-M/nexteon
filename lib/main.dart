@@ -24,7 +24,7 @@ class HomePage extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            Get.to(GalleryPage());
+            Get.to(() => GalleryPage());
           },
           child: Text('Gallery'),
         ),
