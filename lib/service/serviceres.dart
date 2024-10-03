@@ -1,17 +1,29 @@
-import 'package:get/get.dart';
 import 'package:dio/dio.dart';
+import 'package:get/get.dart';
 import '../model/modelclass.dart';
 
-class ApiService extends GetConnect {
-  final String _authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfdXNlcklkXyI6IjYzMDI2ZjIxNWE5ZDVjNDY1NzQ3MTMxYSIsIl9lbXBsb3llZUlkXyI6IjYzMDI2ZjIxYTI1MTZhMTU0YTUxY2YxOSIsIl91c2VyUm9sZV8iOiJzdXBlcl9hZG1pbiIsImlhdCI6MTcyNzc2MzIzMywiZXhwIjoxNzU5Mjk5MjMzfQ.aU6MGEdhB7m-N06OF4ni2eGfB74ZfPq7zBfRiMW04o8";
+class ApiService extends GetxService {
+  final Dio _dio = Dio();
 
+  ApiService() {
+    _dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) {
+        options.headers['Authorization'] = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfdXNlcklkXyI6IjYzMDI2ZjIxNWE5ZDVjNDY1NzQ3MTMxYSIsIl9lbXBsb3llZUlkXyI6IjYzMDI2ZjIxYTI1MTZhMTU0YTUxY2YxOSIsIl91c2VyUm9sZV8iOiJzdXBlcl9hZG1pbiIsImlhdCI6MTcyNzc2MzIzMywiZXhwIjoxNzU5Mjk5MjMzfQ.aU6MGEdhB7m-N06OF4ni2eGfB74ZfPq7zBfRiMW04o8';
+        return handler.next(options);
+      },
+      onResponse: (response, handler) {
+        print("Response data: ${response.data}");
+        return handler.next(response);
+      },
+      onError: (DioError e, handler) {
+        print('Error: ${e.response?.data ?? e.message}');
+        return handler.next(e);
+      },
+    ));
+  }
 
-  Future<List<GalleryItem>> fetchGalleryItems() async {
-    const url = 'https://ajcjewel.com:4000/api/global-gallery/list';
-    final headers = {
-      'Authorization': _authToken,
-    };
-    final data = {
+  Future<GalleryResponse> fetchGalleryItems() async {
+    final payload = {
       "statusArray": [1],
       "screenType": [],
       "responseFormat": [],
@@ -25,26 +37,19 @@ class ApiService extends GetConnect {
     };
 
     try {
-      final response = await post(url, data, headers: headers);
-      if (response.statusCode == 200) {
-        final List<dynamic> list = response.body['data']['list'];
-        return list.map((json) => GalleryItem.fromJson(json)).toList();
-      } else {
-        throw Exception('Failed to load gallery items');
+      final response = await _dio.post('https://ajcjewel.com:4000/api/global-gallery/list', data: payload);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print('Response data::: ${response.data}');
+        return GalleryResponse.fromJson(response.data);
+
       }
-    } on DioError catch (e) {
-      print('DioError: ${e.message}');
-      if (e.response != null) {
-        print('Response data: ${e.response?.data}');
-        print('Response headers: ${e.response?.headers}');
-        print('Response status code: ${e.response?.statusCode}');
-      } else {
-        print('Error sending request!');
+      else {
+        // Handle non-200 status codes
+        throw('Error: ${response!.statusCode}');
       }
-      throw Exception('Failed to load gallery items: ${e.message}');
     } catch (e) {
       print('Error: $e');
-      throw Exception('Failed to load gallery items');
+      rethrow;
     }
   }
 }

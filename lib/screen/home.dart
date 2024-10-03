@@ -19,46 +19,49 @@ class GalleryPage extends StatelessWidget {
             ),
           );
         } else {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              return SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Container(
-                  width: constraints.maxWidth,
-                  child: DataTable(
-                    decoration: BoxDecoration(color: Colors.grey.shade100),
-                    columns: const [
-                      DataColumn(label: Text('Name')),
-                      DataColumn(label: Text('UID')),
-                      DataColumn(label: Text('DocType')),
-                      DataColumn(label: Text('Image')),
-                    ],
-                    rows: controller.errorMessage.isNotEmpty
-                        ? [
-                      DataRow(cells: [
-                        DataCell(
-                          Text(
-                            'Failed to load',
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        ),
-                        DataCell(Text('')),
-                        DataCell(Text('')),
-                        DataCell(Text('')),
-                      ])
-                    ]
-                        : controller.galleryItems.map((item) {
-                      return DataRow(cells: [
-                        DataCell(Text(item.name)),
-                        DataCell(Text(item.uid.toString())),
-                        DataCell(Text(item.docType.toString())),
-                        DataCell(Text(item.url)),
-                      ]);
-                    }).toList(),
-                  ),
-                ),
-              );
-            },
+          return SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: DataTable(
+                decoration: BoxDecoration(color: Colors.grey.shade100),
+                columns: const [
+                  DataColumn(label: Text('Name')),
+                  DataColumn(label: Text('UID')),
+                  DataColumn(label: Text('DocType')),
+                  DataColumn(label: Text('Image')),
+                ],
+                rows: controller.errorMessage.isNotEmpty
+                    ? [
+                  DataRow(cells: [
+                    DataCell(
+                      Text(
+                        'Failed to load',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                    DataCell(Text('')),
+                    DataCell(Text('')),
+                    DataCell(Text('')),
+                  ])
+                ]
+                    : controller.galleryItems.map((item) {
+                  return DataRow(cells: [
+                    DataCell(Text(item.name)),
+                    DataCell(Text(item.uid.toString())),
+                    DataCell(Text(item.getDocTypeDescription())),
+                    DataCell(
+                      Image.network(
+                        "${item.url}",
+                        height: 25,
+                        width: 25,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ]);
+                }).toList(),
+              ),
+            ),
           );
         }
       }),
